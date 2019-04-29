@@ -1,9 +1,10 @@
-/*!
+﻿/*!
  * @file
  * @brief Implementations for the primary game system.
  */
 
 #include <System\GameSystem.hpp>
+
 
 void main(int argc, const char*const* argv)
 {
@@ -87,39 +88,104 @@ void GameSystem::startToLoadSystemArchive()
 }
 unk GameSystem::exeInitializeAudio()
 {
-
+	if (MR::isFirstStep(this))
+	{
+		// TODO
+		MR::FunctorBase fb; // child FunctorBase template
+		// fb vtable
+		fb._04 = mpObjHolder;
+		fb._08 = 0; // more complex load
+		fb._0C = *0x805DB228;
+		fb._10 = *0x805DB22C;
+		// "Audio initialization"
+		MR::startFunctionAsyncExecute(fb, 14, "オーディオ初期化");
+	}
+	updateSceneController();
+	if (isEndFunctionAsyncExecute("オーディオ初期化") && mpObjHolder->_20->isLoadDoneWaveDataAtSystemInit())
+	{
+		MR::waitForEndFunctionAsyncExecute("オーディオ初期化");
+		setNerve(NrvGameSystem::GameSystemInitializeLogoScene::sInstance);
+	}
 }
-unk GameSystem::exeInitializeLogoScene()
+void GameSystem::exeInitializeLogoScene()
 {
+	if (GameSystemFunction::isResetProcessing())
+	{
+		setNerve(NrvGameSystem::GameSystemWaitForReboot::sInstance);
+		return;
+	}
 
+	if (MR::isFirstStep(this))
+		MR::requestChangeScene("Logo");
+
+	updateSceneController();
 }
-unk GameSystem::exeLoadStationedArchive()
+void GameSystem::exeLoadStationedArchive()
 {
+	mpStationedArchiveLoader->update();
 
+	updateSceneController();
+
+	if (mpStationedArchiveLoader->isDone())
+		setNerve(NrvGameSystem::GameSystemNormal::sInstance);
 }
-unk GameSystem::initGX()
+GXFifoObj* GameSystem::initGX()
 {
-
+	if (!mpGraphicsFifo)
+		mpGraphicsFifo = static_cast<void*>(new (32) u8[FIFO_SIZE]);
+	
+	GXInit(mpGraphicsFifo, FIFO_SIZE);
+}	
+void GameSystem::initAfterStationedResourceLoaded()
+{
+	mpFontHolder->createFontFromFile();
+	mpObjHolder->initAfterStationedResourceLoaded();
+	mpHomeButtonLayout->initWithoutIter();
+	mpErrorWatcher->initAfterResourceLoaded();
+	_30 = MR::createSystemWipeHolder();
+	mpSceneController->initAfterStationedResourceLoaded();
+	mpSequenceDirector->initAfterResourceLoaded();
 }
-unk GameSystem::initAfterStationedResourceLoaded()
+void GameSystem::prepareReset()
 {
-
+	mpStationedArchiveLoader->repareReset();
 }
-unk GameSystem::prepareReset()
+bool GameSystem::isPreparedReset() const
 {
+	bool bA, bB = true;
 
+	if (!isNerve(NrvGameSystem::GameSystemWaitForReboot::sInstance) && !isNerve(NrvGameSystem::GameSystemNormal::sInstance))
+		bA = false;
+
+	if (!bA && !mpStationedArchiveLoader->isPreparedReset())
+		bB = false;
+
+	return bB;
 }
-unk GameSystem::isPreparedReset() const
+void GameSystem::frameLoop()
 {
-
+	MainLoopFramework::sManager->beginRender();
+	draw();
+	MainLoopFramework::sManager->endRender();
+	update();
+	calcAnim();
+	mpObjHolder->captureIfAllowForScreenPreserver();
+	MainLoopFramework::sManager->endFrame();
+	MainLoopFramework::sManager->waitForRetrace();
 }
-unk GameSystem::frameLoop()
+void GameSystem::draw()
 {
+	mpSceneController->drawScene();
+	mpSequenceDirector->draw();
+	mpObjHolder->drawStarPointer();
+	mpObjHolder->drawBeforeEndRender();
 
-}
-unk GameSystem::draw()
-{
+	if (_30)
+		_30->vf0x18();
 
+	mpErrorWatcher->draw();
+
+	SingletonHolder<GameSystemResetAndPowerProcess>::ref().vf0x18();
 }
 unk GameSystem::update()
 {
