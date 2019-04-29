@@ -6,6 +6,7 @@
 #pragma once
 
 #include <Common\types.h>
+#include <Util\SingletonHolder.hpp>
 
 // TODO classes
 class NerveExecutor;
@@ -22,18 +23,6 @@ class HomeButtonStateNotifier;
 
 class HeapMemoryWatcher;
 
-template <typename T>
-class SingletonHolder
-{
-	static T sInstance;
-
-public:
-	static inline T*			ptr() { return &sInstance; }
-	static inline const T*		ptr() const { return &sInstance; }
-
-	static inline T&			ref() { return sInstance; }
-	static inline const T&		ref() const { return sInstance; }
-};
 
 //! @brief The program entrypoint
 //!
