@@ -5,14 +5,13 @@
 
 #pragma once
 
-#include <Common\types.h>
-#include <Util\SingletonHolder.hpp>
+#include <Common/types.h>
+#include <Util/SingletonHolder.hpp>
 #include <System/NerveExecutor.hpp>
-#include <revolution\gx.h>
+#include <System/GameSystemDimmingWatcher.hpp>
+#include <revolution/gx.h>
 
 // TODO classes
-
-class GameSystemDimmingWatcher;
 class GameSequenceDirector;
 class GameSystemErrorWatcher;
 class GameSystemFontHolder;
