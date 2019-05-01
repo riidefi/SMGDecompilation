@@ -7,6 +7,7 @@
 
 #include <Common\types.h>
 #include <Util\SingletonHolder.hpp>
+#include <LiveActor\Spine.hpp>
 
 class Nerve;
 

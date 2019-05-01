@@ -6,8 +6,7 @@
 #pragma once
 
 #include <LiveActor/Nerve.hpp>
-
-class ActorStateKeeper;
+#include <LiveActor/ActorStateKeeper.hpp>
 
 class Spine
 {
