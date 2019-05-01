@@ -7,10 +7,11 @@
 
 #include <Common\types.h>
 #include <Util\SingletonHolder.hpp>
+#include <System/NerveExecutor.hpp>
 #include <revolution\gx.h>
 
 // TODO classes
-class NerveExecutor;
+
 class GameSystemDimmingWatcher;
 class GameSequenceDirector;
 class GameSystemErrorWatcher;

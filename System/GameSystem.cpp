@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file
  * @brief Implementations for the primary game system.
  */
@@ -14,7 +14,7 @@ void main(int argc, const char*const* argv)
 GameSystem::GameSystem()
 	: NerveExecutor("GameSystem")
 {
-	_08 = 0;
+	mpGraphicsFifo = NULL;
 	// _10 not reset. was it added later than the others?
 	mpSequenceDirector = NULL;
 	mpErrorWatcher = NULL;
