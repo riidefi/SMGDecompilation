@@ -4,6 +4,7 @@
  */
 
 #include <System\NerveExecutor.hpp>
+#include <LiveActor\Spine.hpp>
 
 NerveExecutor::NerveExecutor(const char* tag)
 {
@@ -32,5 +33,5 @@ bool NerveExecutor::isNerve(Nerve const * pNerve) const
 }
 unk NerveExecutor::getNerveStep() const
 {
-	return mpSpine->_0C;
+	return mpSpine->mStep;
 }

@@ -21,8 +21,8 @@ public:
 
 private:
 	void* mpExecutor; //!< [+0x00]
-	Nerve const* mpLastNerve; //!< [+0x04] last nerve -- current only when no next
-	Nerve const* mpNextNerve; //!< [+0x08] current nerve
-	int mNumUpdates; //!< [+0x00] Incremented every update; -1 before update
+	Nerve* mpLastNerve; //!< [+0x04] last nerve -- current only when no next
+	Nerve* mpNextNerve; //!< [+0x08] current nerve
+	int mStep; //!< [+0x0C] Incremented every update; -1 before update
 	ActorStateKeeper* mpStateKeeper; //!< [+0x10]
 };

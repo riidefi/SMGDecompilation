@@ -14,18 +14,18 @@ Spine::Spine(void* pExecutor, Nerve const* pNerve)
 void Spine::update()
 {
 	changeNerve();
-	mpLastNerve->vf0x08(this);
-	mNumUpdates++;
+	mpLastNerve->execute(this);
+	mStep++;
 	changeNerve();
 }
 
 void Spine::setNerve(Nerve const* pNerve)
 {
-	if (mNumUpdates >= 0)
-		mpLastNerve->vf0x0c(this);
+	if (mStep >= 0)
+		mpLastNerve->executeOnEnd(this);
 
-	mpNextNerve = pNerve;
-	mNumUpdates = -1;
+	mpNextNerve = (Nerve*)pNerve;
+	mStep = -1;
 }
 Nerve const* Spine::getCurrentNerve() const
 {
@@ -42,10 +42,10 @@ void Spine::changeNerve()
 	if (mpStateKeeper)
 	{
 		mpStateKeeper->endState(mpLastNerve);
-		mpStateKeeper->startState(_08);
+		mpStateKeeper->startState(mpNextNerve);
 	}
 
-	mNumUpdates = 0;
+	mStep = 0;
 	mpLastNerve = mpNextNerve;
 	mpNextNerve = 0;
 }
