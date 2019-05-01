@@ -8,7 +8,7 @@
 NerveExecutor::NerveExecutor(const char* tag)
 {
 	// tag unused in release build
-	_04 = 0;
+	mpSpine = NULL;
 }
 NerveExecutor::~NerveExecutor()
 {}
