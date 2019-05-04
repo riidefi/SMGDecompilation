@@ -4,6 +4,7 @@
 typedef int unk32;
 //! Describes an unknown 16 bit value
 typedef short unk16;
+typedef unsigned char unk8;
 
 
 typedef unk32 unk;
