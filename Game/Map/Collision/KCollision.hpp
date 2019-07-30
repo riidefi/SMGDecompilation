@@ -121,9 +121,9 @@ public:
 	//! @brief Determine which, if any, prism a point is colliding with.
 	//!
 	//! @param[in]  point			Pointer to the point to check. Must be valid.
-	//! @param[in]  thickness_scale	Scale for prism thickness leniancy.
-	//! @param[out] pDstThickness	Output for how far inside a prism we are colliding. This will be within the scaled prism thickness restriction. Must be valid.
-	const KC_PrismData* checkPoint(Fxyz* point, f32 thickness_scale, f32* pDstThickness);
+	//! @param[in]  radius			Scale for prism thickness leniancy.
+	//! @param[out] pPointDistance	Output for how far inside a prism we are colliding. This will be within the scaled prism thickness restriction. Must be valid.
+	const KC_PrismData* checkPoint(Fxyz* point, f32 radius, f32* pPointDistance);
 
 
 
