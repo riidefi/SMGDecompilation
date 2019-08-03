@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <types.h>
+#include "smg_types.h"
 
 #include "JMapInfoIter.hpp"
 #include "JMapData.hpp"
@@ -112,7 +112,7 @@ public:
 		//! @return If the operation succeeded.
 		//!
 		template <typename T>
-		const bool getValue(int, const char*, T* pOut) const;
+		const bool getValue(int, const char* path, T* pOut) const;
 
 		template <typename T>
 		const JMapInfoIter findElement(const char*, T*, int);
@@ -123,21 +123,34 @@ public:
 	// Variant Helpers
 	//
 	public:
-		FORCE_INLINE u32 getNumData() const
+		inline const bool checkInfoHash(int idx, u32 match) const
+		{
+			return match == mpData->mItemInfoTable[idx].hash;
+		}
+		inline int getNumData() const
 		{
 			return getNumData(mpData);
 		}
+
+		inline int get00() const
+		{
+			if (mpData)
+				return mpData->_00;
+			else
+				return 0;
+		}
 	protected:
-		FORCE_INLINE u32 getNumData(bool valid) const;
-		inline u32 calcDataElementOffset(u32 idx) const
+		inline int getNumData(bool valid) const;
+		
+		inline int calcDataElementOffset(int idx) const
 		{
 			u32 stride = ((volatile JMapData*)mpData)->mDataStride;
-			return mpData->ofsData + (idx * stride);
+			return static_cast<int>(mpData->ofsData + (idx * stride));
 		}
 
-		FORCE_INLINE u32 calcDataElementOffset() const
+		inline int calcDataElementOffset() const
 		{
-			return calcDataElementOffset((volatile u32)(mpData ? mpData->_00 : 0));
+			return calcDataElementOffset(mpData ? mpData->_00 : 0);
 		}
 	
 

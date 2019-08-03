@@ -1,12 +1,12 @@
 #pragma once
 
-#include <types.h>
+#include "smg_types.h"
 
 struct JMapData
 {
-	u32 _00;
-	u32 nData; // 04
-	u32 ofsData; // 08
+	int _00;
+	int nData; // 04
+	int ofsData; // 08
 	u32 mDataStride; // 0C
 
 	struct ItemInfo
@@ -21,7 +21,7 @@ struct JMapData
 	};
 	ItemInfo mItemInfoTable[]; // 10
 
-	inline const ItemInfo& getInfoTableEntry(u32 idx) const
+	inline const ItemInfo& getInfoTableEntry(int idx) const
 	{
 		return mItemInfoTable[idx];
 	}

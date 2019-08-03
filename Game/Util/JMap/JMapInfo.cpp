@@ -25,11 +25,10 @@ namespace MR {
 
 // String literal. However, for our linker reinsertion setup, this is necessary.
 // Should look into automated data segment splitting and glue
-LOCALREF(_defaultName, const char*, "Undifined", JMapInfo_default_name_anonymous)
+// LOCALREF(_defaultName, const char*, "Undifined", JMapInfo_default_name_anonymous)
+extern const char _defaultName[];
 
-#ifdef _MSC_VER
 #pragma region Internal Types
-#endif
 
 struct JMapDataPtr
 {
@@ -45,26 +44,21 @@ struct JMapDataPtr
 
 	const JMapData* _wrapped;
 };
-#ifdef _MSC_VER
-#pragma endregion
-#endif
 
-#ifdef _MSC_VER
+#pragma endregion
+
 #pragma region Constructor/Destructor
-#endif
+
 JMapInfo::JMapInfo()
 	: mpData(nullptr), mpName(_defaultName)
 {}
 JMapInfo::~JMapInfo()
 {}
 
-#ifdef _MSC_VER
 #pragma endregion
-#endif
 
-#ifdef _MSC_VER
 #pragma region Setup
-#endif
+
 bool JMapInfo::attach(const void* pBin)
 {
 	if (!pBin)
@@ -74,13 +68,9 @@ bool JMapInfo::attach(const void* pBin)
 	return true;
 }
 
-#ifdef _MSC_VER
 #pragma endregion
-#endif
 
-#ifdef _MSC_VER
 #pragma region Primitive Setters/Getters
-#endif
 
 void JMapInfo::setName(const char* pName)
 {
@@ -92,18 +82,14 @@ const char* JMapInfo::getName() const
 }
 
 // unproven
-u32 JMapInfo::getNumData(bool valid) const
+int JMapInfo::getNumData(bool valid) const
 {
 	return valid ? mpData->nData : 0;
 }
 
-#ifdef _MSC_VER
 #pragma endregion
-#endif
 
-#ifdef _MSC_VER
 #pragma region Advanced Data Acquisition
-#endif
 
 int JMapInfo::searchItemInfo(const char* path) const
 {
@@ -113,14 +99,14 @@ int JMapInfo::searchItemInfo(const char* path) const
 	if (!valid)
 		return ERR_KEY_NOT_FOUND;
 
-	// Must be an int
-	const int nData = static_cast<int>(getNumData(valid));
-	const u32 hash = JGadget::getHashCode(path);
+	const int nData = getNumData(valid);
+	const u32 hash  = JGadget::getHashCode(path);
 
-	for (int i = 0; i < nData; i++)
-		if (mpData->mItemInfoTable[i].hash == hash)
+	for (int i = 0; i < nData; ++i) {
+		if (checkInfoHash(i, hash))
 			return i;
-
+	}
+	
 	return ERR_KEY_NOT_FOUND;
 }
 
@@ -191,7 +177,7 @@ bool JMapInfo::getValueFast(int dataIndex, int infoIndex, s32* pOut) const
 	if (mpData->getInfoTableEntry(infoIndex).shift == 0)
 	{
 		const char* data_ptr = (char*)mpData + mpData->ofsData + (dataIndex * mpData->mDataStride) + mpData->getInfoTableEntry(infoIndex).ofs_data;
-		const JMapData::ItemInfo& info = mpData->getInfoTableEntry(static_cast<u32>(infoIndex));
+		const JMapData::ItemInfo& info = mpData->getInfoTableEntry(infoIndex);
 
 		switch (info.value_type)
 		{
@@ -227,20 +213,17 @@ bool JMapInfo::getValueFast(int dataIndex, int infoIndex, s32* pOut) const
 failure:
 	return false;
 }
-#ifdef _MSC_VER
-#pragma endregion
-#endif
 
-#ifdef _MSC_VER
+#pragma endregion
+
 #pragma region Searching
-#endif
 
 MW_PRAG_OPT_S
 JMapInfoIter MR::findJMapInfoElementNoCase(const JMapInfo* pInfo, const char* path, const char* key, int startIndex)
 {
 	const char* acquired;
 
-	for (int i = startIndex; i < pInfo->getNumData(); ++i)
+	for (int i = startIndex; i < pInfo->get00(); ++i)
 	{
 		pInfo->getValue<const char*>(i, path, &acquired);
 
@@ -258,11 +241,11 @@ MW_PRAG_OPT_S
 JMapInfoIter JMapInfo::findElementBinary(const char* path, const char* key) const
 {
 	int i = 0;
-	int num_data = (int)getNumData();
+	int num_data = (int)get00();
 
 	while(i < num_data)
 	{
-		int idx = (int)(num_data + i) / (int)2; // CWCC:S,!P; CWG:52
+		int idx = (int)(i + num_data) / (int)2; // CWCC*; CWG:52
 
 		// Acquire a pointer to the name
 		const char* acquired;
@@ -275,16 +258,14 @@ JMapInfoIter JMapInfo::findElementBinary(const char* path, const char* key) cons
 			return JMapInfoIter(this, idx);
 
 		if (comparison_result < 0)
-			i = comparison_result + 1;
+			i = idx + 1;
 
 		if (comparison_result >= 0)
-			i = comparison_result;
+			num_data = idx;
 	}
 
 	return this->end();
 }
 MW_PRAG_END
 
-#ifdef _MSC_VER
 #pragma endregion
-#endif

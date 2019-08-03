@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <types.h>
+#include "smg_types.h"
 #include <JSystem/JGeometry/TVector.hpp>
 
 // TODO
