@@ -11,11 +11,11 @@ public:
 	//	{}
 	// inline ~JMapInfoIter()
 	// {}
-	inline JMapInfoIter(const JMapData* data, u32 pos)
+	inline JMapInfoIter(const JMapInfo* data, u32 pos)
 		: mpData(data), mPosition(pos)
 	{}
 
 protected:
-	const JMapData* mpData;
+	const JMapInfo* mpData;
 	u32 mPosition;
 };

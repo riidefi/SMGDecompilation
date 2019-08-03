@@ -1,6 +1,6 @@
 /*
  * @file
- * @brief TODO
+ * @brief Backend for interfacing with BCSV files.
  */
 
 #pragma once
@@ -9,106 +9,151 @@
 
 #include "JMapInfoIter.hpp"
 #include "JMapData.hpp"
-
-
-//! @brief Wraps a BCSV file.
+ 
+//! @brief Wraps a BCSV file. 
 //!
 class JMapInfo
 {
 public:
-	//! @brief The constructor.
-	//!
-	//! @post
-	//!		- mpData is NULL.
-	//!		- mpName is "Undifined". (Yes, "Undifined")
-	//!
-	JMapInfo();
 
-	//! @brief The destructor.
-	//!
-	~JMapInfo();
+	//
+	// Types
+	//
 
-	//! @brief Attach a binary file.
-	//!
-	//! @param[in] pBin Pointer to the binary file.
-	//!
-	//! @return If the operation succeeded (pBin is non-null).
-	//!
-	bool attach(const void* pBin);
+		//! @brief Errors arising from operations within this class.
+		//!
+		enum Error
+		{
+			ERR_KEY_NOT_FOUND = -1,
+		};
 
-	//! @brief Set the name to the specified string.
-	//!
-	//! @param[in] pName Pointer to the name. Is not checked. (TODO: Check function size in debug maps -- is it checked in debug?)
-	//!
-	void setName(const char* pName);
+	//
+	// Constructor/Destructor
+	//
 
-	//! @brief Get the name.
-	//!
-	//! @return A pointer to the name held. Ownership is not transferred, and validity is not ensured.
-	//!
-	const char* getName() const;
+		//! @brief The constructor.
+		//!
+		//! @post
+		//!		- mpData is NULL.
+		//!		- mpName is "Undifined". (Yes, "Undifined")
+		//!
+		JMapInfo();
 
-	int searchItemInfo(const char*) const;
+		//! @brief The destructor.
+		//!
+		~JMapInfo();
 
-	u8 getValueType(const char*) const;
+	//
+	// Setup
+	//
 
-	bool getValueFast(int dataIndex, int infoIndex, const char**  pOut) const;
-	bool getValueFast(int dataIndex, int infoIndex, u32* pOut) const;
-	bool getValueFast(int dataIndex, int infoIndex, s32* pOut) const;
+		//! @brief Attach a binary file.
+		//!
+		//! @param[in] pBin Pointer to the binary file.
+		//!
+		//! @return If the operation succeeded (pBin is non-null).
+		//!
+		bool attach(const void* pBin);
 
-	// Implements MR::findJMapInfoElementNoCase
+	//
+	// Primitive Getters/Setters
+	//
 
-	JMapInfoIter findElementBinary(const char*, const char*) const;
+		//! @brief Set the name to the specified string.
+		//!
+		//! @param[in] pName Pointer to the name. Is not checked. (TODO: Check function size in debug maps -- is it checked in debug?)
+		//!
+		void setName(const char* pName);
 
-	// Header funcs
+		//! @brief Get the name.
+		//!
+		//! @return A pointer to the name held. Ownership is not transferred, and validity is not ensured.
+		//!
+		const char* getName() const;
 
-	//! @brief Get a value of type T.
-	//!
-	//! @tparam T Type of value to acquire.
-	//!
-	//! @param[in]  a TODO
-	//! @param[in]  b TODO
-	//! @param[out] pOut TODO
-	//!
-	//! @return If the operation succeeded.
-	//!
-	template <typename T>
-	const bool getValue(int, const char*, T* pOut) const;
+	//
+	// Advanced Data Acquisition
+	//
 
-	template <typename T>
-	const JMapInfoIter findElement(const char*, T*, int);
+		//! @brief Searches for an item info index based on the path (key).
+		//!
+		//! @param[in] path Path to be hashed and compared in the BCSV.
+		//!
+		//! @return The index of the info. If the specified path cannot be found, a negative error will be returned.
+		//!
+		int searchItemInfo(const char* path) const;
 
-	// Linked elsewhere. If has data attached, return _00, else 0
-	JMapInfoIter end() const;
+		//! @brief	Gets the type of the value at the specified path.
+		//!
+		//! @param[in] path Path to the data to be checked.
+		//!
+		//! @return The type of the value at the path, or JMAP_VALUE_TYPE_INVALID if it cannot be found.
+		//!
+		JMapValueType getValueType(const char* path) const;
 
-	// Decomp Helpers
-	inline u32 getNumData(bool valid) const;
-	inline u32 getNumData() const
-	{
-		return getNumData(mpData);
-	}
+		bool getValueFast(int dataIndex, int infoIndex, const char**	pOut) const;
+		bool getValueFast(int dataIndex, int infoIndex, u32*			pOut) const;
+		bool getValueFast(int dataIndex, int infoIndex, s32*			pOut) const;
 
-protected:
-	const JMapData* mpData; //!< [+0x00] Binary that has been attached.
-	const char*		mpName; //!< [+0x08] Name. Does not own it.
+		JMapInfoIter findElementBinary(const char*, const char*) const;
 
-	// Decomp Helpers
+	//
+	// Templates
+	//
 
-	// Inferred through invariant analysis
-	u32 calcDataElementOffset(u32 idx) const
-	{
-		u32 stride = ((volatile JMapData*)mpData)->mDataStride;
-		return mpData->ofsData + (idx * stride);
-	}
+		//! @brief Get a value of type T.
+		//!
+		//! @tparam T Type of value to acquire.
+		//!
+		//! @param[in]  a TODO
+		//! @param[in]  b TODO
+		//! @param[out] pOut TODO
+		//!
+		//! @return If the operation succeeded.
+		//!
+		template <typename T>
+		const bool getValue(int, const char*, T* pOut) const;
 
-	u32 calcDataElementOffset() const
-	{
-		return calcDataElementOffset((volatile u32)(mpData ? mpData->_00 : 0));
-	}
+		template <typename T>
+		const JMapInfoIter findElement(const char*, T*, int);
+
+		JMapInfoIter end() const;
+
+	//
+	// Variant Helpers
+	//
+	public:
+		inline u32 getNumData() const
+		{
+			return getNumData(mpData);
+		}
+	protected:
+		inline u32 getNumData(bool valid) const;
+		inline u32 calcDataElementOffset(u32 idx) const
+		{
+			u32 stride = ((volatile JMapData*)mpData)->mDataStride;
+			return mpData->ofsData + (idx * stride);
+		}
+
+		inline u32 calcDataElementOffset() const
+		{
+			return calcDataElementOffset((volatile u32)(mpData ? mpData->_00 : 0));
+		}
+	
+
+	//
+	// Members
+	//
+	protected:
+		const JMapData* mpData; //!< [+0x00] Binary that has been attached.
+		const char*		mpName; //!< [+0x08] Name. Does not own it.
 };
 
-#ifdef LINKED_ELSEWHERE
+//
+//
+//
 
+#ifdef LINKED_ELSEWHERE
 
 template <typename T>
 const bool JMapInfo::getValue(int, const char*, T*) const

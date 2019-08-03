@@ -1,7 +1,10 @@
 /*
  * @file
- * @brief TODO
+ * @brief Implementation for BCSV backend.
+ * @remarks
+ *	- MR: Implements findJMapInfoElementNoCase
  */
+
 #include "JMapInfo.hpp"
 
 #include "Game/MR/JMap.hpp"
@@ -11,6 +14,7 @@
 namespace JGadget
 {
 extern u32 getHashCode(const char*);
+bool isEqualStringCase(const char*, const char*);
 }
 
 //
@@ -22,10 +26,7 @@ extern u32 getHashCode(const char*);
 // Should look into automated data segment splitting and glue
 LOCALREF(_defaultName, const char*, "Undifined", JMapInfo_default_name_anonymous)
 
-//
-// Internal types
-//
-
+#pragma region Internal Types
 
 struct JMapDataPtr
 {
@@ -42,9 +43,9 @@ struct JMapDataPtr
 	const JMapData* _wrapped;
 };
 
-//
-// Constructor/Destructor
-//
+#pragma endregion
+
+#pragma region Constructor/Destructor
 
 JMapInfo::JMapInfo()
 	: mpData(nullptr), mpName(_defaultName)
@@ -52,9 +53,9 @@ JMapInfo::JMapInfo()
 JMapInfo::~JMapInfo()
 {}
 
-//
-// Setup
-//
+#pragma endregion
+
+#pragma region Setup
 
 bool JMapInfo::attach(const void* pBin)
 {
@@ -65,9 +66,9 @@ bool JMapInfo::attach(const void* pBin)
 	return true;
 }
 
-//
-// Primitive Getters/Setters
-//
+#pragma endregion
+
+#pragma region Primitive Setters/Getters
 
 void JMapInfo::setName(const char* pName)
 {
@@ -84,9 +85,9 @@ u32 JMapInfo::getNumData(bool valid) const
 	return valid ? mpData->nData : 0;
 }
 
-//
-// Advanced Data Acquisition
-//
+#pragma endregion
+
+#pragma region Advanced Data Acquisition
 
 int JMapInfo::searchItemInfo(const char* path) const
 {
@@ -94,7 +95,7 @@ int JMapInfo::searchItemInfo(const char* path) const
 
 	const bool valid = jmp_ptr.valid();
 	if (!valid)
-		return -1;
+		return ERR_KEY_NOT_FOUND;
 
 	// Must be an int
 	const int nData = static_cast<int>(getNumData(valid));
@@ -104,15 +105,15 @@ int JMapInfo::searchItemInfo(const char* path) const
 		if (mpData->mItemInfoTable[i].hash == hash)
 			return i;
 
-	return -1;
+	return ERR_KEY_NOT_FOUND;
 }
 
 MW_PRAG_NOINLINE
-u8 JMapInfo::getValueType(const char* path) const
+JMapValueType JMapInfo::getValueType(const char* path) const
 {
 	const int itemInfoIndex = searchItemInfo(path);
 
-	return itemInfoIndex < 0 ? (u8)JMAP_VALUE_TYPE_INVALID : mpData->mItemInfoTable[itemInfoIndex].value_type;
+	return itemInfoIndex < 0 ? JMAP_VALUE_TYPE_INVALID : static_cast<JMapValueType>(mpData->mItemInfoTable[itemInfoIndex].value_type);
 }
 MW_PRAG_END
 
@@ -129,8 +130,9 @@ bool JMapInfo::getValueFast(int a, int b, const char** pOut) const
 		*pOut = (const char*)pData;
 	}
 
-	return 1;
+	return true;
 }
+
 namespace {
 template <typename T>
 inline T acquire(const char* ptr)
@@ -140,6 +142,7 @@ inline T acquire(const char* ptr)
 	return *reinterpret_cast<const T*>(ptr);
 }
 }
+
 bool JMapInfo::getValueFast(int dataIndex, int infoIndex, u32* pOut) const
 {
 	u32 acquired;
@@ -166,53 +169,52 @@ bool JMapInfo::getValueFast(int dataIndex, int infoIndex, u32* pOut) const
 	*pOut = (acquired & info.mask) >> info.shift;
 	return true;
 }
+
 bool JMapInfo::getValueFast(int dataIndex, int infoIndex, s32* pOut) const
 {
-	if (mpData->getInfoTableEntry(infoIndex).shift)
-		goto failure;
+	if (mpData->getInfoTableEntry(infoIndex).shift == 0)
 	{
 		const char* data_ptr = (char*)mpData + mpData->ofsData + (dataIndex * mpData->mDataStride) + mpData->getInfoTableEntry(infoIndex).ofs_data;
 		const JMapData::ItemInfo& info = mpData->getInfoTableEntry(infoIndex);
 
 		switch (info.value_type)
 		{
+		// Explicitly unsigned UINT32 values cannot be acquired here.
 		case JMAP_VALUE_TYPE_INT32:
 			if (info.mask != 0xFFFFFFFF)
 				goto failure;
 
 			*pOut = acquire<s32>(data_ptr);
 			break;
+
 		case JMAP_VALUE_TYPE_INT16:
 			if (info.mask != 0xFFFF)
 				goto failure;
 
 			*pOut = acquire<s16>(data_ptr);
 			break;
-		// n>4 && n<6
+
 		case JMAP_VALUE_TYPE_INT8:
 			if (info.mask != 0xFF)
 				goto failure;
 
 			*pOut = acquire<s8>(data_ptr);
 			break;
-		// >= 6
+
 		default:
 			goto failure;
 		}
+
+		return true;
 	}
-	return true;
 
 failure:
 	return false;
 }
-namespace MR
-{
-bool isEqualStringCase(const char*, const char*);
-}
 
-//
-// Searching
-//
+#pragma endregion
+
+#pragma region Searching
 
 JMapInfoIter MR::findJMapInfoElementNoCase(const JMapInfo* pInfo, const char* path, const char* key, int startIndex)
 {
@@ -233,3 +235,5 @@ JMapInfoIter JMapInfo::findElementBinary(const char* strA, const char* strB) con
 {
 	/* TODO*/ return 0;
 }
+
+#pragma endregion
