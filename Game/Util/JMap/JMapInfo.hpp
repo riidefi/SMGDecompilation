@@ -24,7 +24,7 @@ public:
 		//!
 		enum Error
 		{
-			ERR_KEY_NOT_FOUND = -1,
+			ERR_KEY_NOT_FOUND = -1
 		};
 
 	//
@@ -95,7 +95,7 @@ public:
 		bool getValueFast(int dataIndex, int infoIndex, u32*			pOut) const;
 		bool getValueFast(int dataIndex, int infoIndex, s32*			pOut) const;
 
-		JMapInfoIter findElementBinary(const char*, const char*) const;
+		JMapInfoIter findElementBinary(const char* path, const char* key) const;
 
 	//
 	// Templates
@@ -123,19 +123,19 @@ public:
 	// Variant Helpers
 	//
 	public:
-		inline u32 getNumData() const
+		FORCE_INLINE u32 getNumData() const
 		{
 			return getNumData(mpData);
 		}
 	protected:
-		inline u32 getNumData(bool valid) const;
+		FORCE_INLINE u32 getNumData(bool valid) const;
 		inline u32 calcDataElementOffset(u32 idx) const
 		{
 			u32 stride = ((volatile JMapData*)mpData)->mDataStride;
 			return mpData->ofsData + (idx * stride);
 		}
 
-		inline u32 calcDataElementOffset() const
+		FORCE_INLINE u32 calcDataElementOffset() const
 		{
 			return calcDataElementOffset((volatile u32)(mpData ? mpData->_00 : 0));
 		}

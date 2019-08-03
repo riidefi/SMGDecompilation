@@ -17,7 +17,9 @@ typedef unk32 unk;
 #define noexcept
 #define nullptr NULL
 #endif
-#ifdef __MWERKS__
+
+
+#ifdef __CWCC__
 #define MWREG register
 #define CONST_MWREG register
 
@@ -25,9 +27,15 @@ typedef unk32 unk;
 #define MW_PRAG_NOINLINE \
 	_Pragma("push") \
 	_Pragma("dont_inline on")
+#define MW_PRAG_OPT_S \
+	_Pragma("push") \
+	_Pragma("optimize_for_size on")
+	
 #define MW_PRAG_END \
 	_Pragma("pop")
 #define DECOMP // TODO: Move to build
+
+#define FORCE_INLINE __inline
 
 #else
 #define asm
@@ -35,6 +43,9 @@ typedef unk32 unk;
 #define CONST_MWREG const
 #define MW_PRAG_NOINLINE
 #define MW_PRAG_END
+#define MW_PRAG_OPT_S
+
+#define FORCE_INLINE __forceinline
 #endif
 
 // A function that does nothing

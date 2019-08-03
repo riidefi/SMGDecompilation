@@ -11,10 +11,11 @@
 
 // External symbols
 
-namespace JGadget
-{
-extern u32 getHashCode(const char*);
-bool isEqualStringCase(const char*, const char*);
+namespace JGadget {
+	extern u32 getHashCode(const char*);
+}
+namespace MR {
+	extern bool isEqualStringCase(const char*, const char*);
 }
 
 //
@@ -26,7 +27,9 @@ bool isEqualStringCase(const char*, const char*);
 // Should look into automated data segment splitting and glue
 LOCALREF(_defaultName, const char*, "Undifined", JMapInfo_default_name_anonymous)
 
+#ifdef _MSC_VER
 #pragma region Internal Types
+#endif
 
 struct JMapDataPtr
 {
@@ -42,21 +45,26 @@ struct JMapDataPtr
 
 	const JMapData* _wrapped;
 };
-
+#ifdef _MSC_VER
 #pragma endregion
+#endif
 
+#ifdef _MSC_VER
 #pragma region Constructor/Destructor
-
+#endif
 JMapInfo::JMapInfo()
 	: mpData(nullptr), mpName(_defaultName)
 {}
 JMapInfo::~JMapInfo()
 {}
 
+#ifdef _MSC_VER
 #pragma endregion
+#endif
 
+#ifdef _MSC_VER
 #pragma region Setup
-
+#endif
 bool JMapInfo::attach(const void* pBin)
 {
 	if (!pBin)
@@ -66,9 +74,13 @@ bool JMapInfo::attach(const void* pBin)
 	return true;
 }
 
+#ifdef _MSC_VER
 #pragma endregion
+#endif
 
+#ifdef _MSC_VER
 #pragma region Primitive Setters/Getters
+#endif
 
 void JMapInfo::setName(const char* pName)
 {
@@ -85,9 +97,13 @@ u32 JMapInfo::getNumData(bool valid) const
 	return valid ? mpData->nData : 0;
 }
 
+#ifdef _MSC_VER
 #pragma endregion
+#endif
 
+#ifdef _MSC_VER
 #pragma region Advanced Data Acquisition
+#endif
 
 int JMapInfo::searchItemInfo(const char* path) const
 {
@@ -175,7 +191,7 @@ bool JMapInfo::getValueFast(int dataIndex, int infoIndex, s32* pOut) const
 	if (mpData->getInfoTableEntry(infoIndex).shift == 0)
 	{
 		const char* data_ptr = (char*)mpData + mpData->ofsData + (dataIndex * mpData->mDataStride) + mpData->getInfoTableEntry(infoIndex).ofs_data;
-		const JMapData::ItemInfo& info = mpData->getInfoTableEntry(infoIndex);
+		const JMapData::ItemInfo& info = mpData->getInfoTableEntry(static_cast<u32>(infoIndex));
 
 		switch (info.value_type)
 		{
@@ -211,11 +227,15 @@ bool JMapInfo::getValueFast(int dataIndex, int infoIndex, s32* pOut) const
 failure:
 	return false;
 }
-
+#ifdef _MSC_VER
 #pragma endregion
+#endif
 
+#ifdef _MSC_VER
 #pragma region Searching
+#endif
 
+MW_PRAG_OPT_S
 JMapInfoIter MR::findJMapInfoElementNoCase(const JMapInfo* pInfo, const char* path, const char* key, int startIndex)
 {
 	const char* acquired;
@@ -231,9 +251,40 @@ JMapInfoIter MR::findJMapInfoElementNoCase(const JMapInfo* pInfo, const char* pa
 	return pInfo->end();
 
 }
-JMapInfoIter JMapInfo::findElementBinary(const char* strA, const char* strB) const
-{
-	/* TODO*/ return 0;
-}
+MW_PRAG_END
 
+extern "C" int strcmp(const char * lhs, const char * rhs);
+MW_PRAG_OPT_S
+JMapInfoIter JMapInfo::findElementBinary(const char* path, const char* key) const
+{
+	int i = 0;
+	int num_data = (int)getNumData();
+
+	while(i < num_data)
+	{
+		int idx = (int)(num_data + i) / (int)2; // CWCC:S,!P; CWG:52
+
+		// Acquire a pointer to the name
+		const char* acquired;
+		getValue<const char*>(idx, path, &acquired);
+
+		// Compare the name against key
+		const int comparison_result = strcmp(acquired, key);
+
+		if (!comparison_result)
+			return JMapInfoIter(this, idx);
+
+		if (comparison_result < 0)
+			i = comparison_result + 1;
+
+		if (comparison_result >= 0)
+			i = comparison_result;
+	}
+
+	return this->end();
+}
+MW_PRAG_END
+
+#ifdef _MSC_VER
 #pragma endregion
+#endif
