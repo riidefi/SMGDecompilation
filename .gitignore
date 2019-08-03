@@ -55,6 +55,13 @@ Water/
 GravityDust.*
 SpaceInner.*
 
+Actor/
+Draw/
+Fur/
+Joint/
+Math/
+Misc/
+
 # WIP Files
 CollisionCategorizedKeeper.cpp
 CollisionCategorizedKeeper.hpp
@@ -70,3 +77,7 @@ HitInfo.cpp
 HitInfo.hpp
 KCollisionPlus.cpp
 KCollisionPlus.hpp
+
+JMapIdInfo.*
+JMapLinkInfo.*
+JMapUtil.*

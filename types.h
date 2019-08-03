@@ -17,6 +17,25 @@ typedef unk32 unk;
 #define noexcept
 #define nullptr NULL
 #endif
+#ifdef __MWERKS__
+#define MWREG register
+#define CONST_MWREG register
+
+#define WPOPT volatile
+#define MW_PRAG_NOINLINE \
+	_Pragma("push") \
+	_Pragma("dont_inline on")
+#define MW_PRAG_END \
+	_Pragma("pop")
+#define DECOMP // TODO: Move to build
+
+#else
+#define asm
+#define MWREG
+#define CONST_MWREG const
+#define MW_PRAG_NOINLINE
+#define MW_PRAG_END
+#endif
 
 // A function that does nothing
 #define NULLSUB void
@@ -26,5 +45,18 @@ typedef unk32 unk;
 
 #define UNUSED_PARAM(x) (void)(x); // EPPC:#pragma unused
 #define UNUSED
+
+
+#ifdef DECOMP
+
+#define LOCALREF(key, type, data, ref) \
+	extern type key;
+#else
+#define LINKED_ELSEWHERE
+
+#define LOCALREF(key, type, data, ref) \
+	type key = data;
+#endif
+
 // Standard types
 #include <revolution/types.h>
