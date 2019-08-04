@@ -18,6 +18,9 @@ namespace MR {
 	extern bool isEqualStringCase(const char*, const char*);
 }
 
+// Speed up compilation times by not including massive standard headers
+extern "C" int strcmp(const char * lhs, const char * rhs);
+
 //
 // Externally referenced internal data
 //
@@ -91,6 +94,15 @@ int JMapInfo::getNumData(bool valid) const
 
 #pragma region Advanced Data Acquisition
 
+namespace {
+template <typename T>
+inline T acquire(const char* ptr)
+{
+	// TODO: Consider adding endianness support for cross-platform building
+	return *reinterpret_cast<const T*>(ptr);
+}
+}
+
 int JMapInfo::searchItemInfo(const char* path) const
 {
 	JMapDataPtr jmp_ptr(mpData);
@@ -110,20 +122,18 @@ int JMapInfo::searchItemInfo(const char* path) const
 	return ERR_KEY_NOT_FOUND;
 }
 
-MW_PRAG_NOINLINE
 JMapValueType JMapInfo::getValueType(const char* path) const
 {
 	const int itemInfoIndex = searchItemInfo(path);
 
 	return itemInfoIndex < 0 ? JMAP_VALUE_TYPE_INVALID : static_cast<JMapValueType>(mpData->mItemInfoTable[itemInfoIndex].value_type);
 }
-MW_PRAG_END
 
-bool JMapInfo::getValueFast(int a, int b, const char** pOut) const
+bool JMapInfo::getValueFast(int dataIndex, int infoIndex, const char** pOut) const
 {
-	const char* pData = (char*)mpData + calcDataElementOffset(a) + mpData->mItemInfoTable[b].ofs_data;
+	const char* pData = (char*)mpData + mpData->ofsData + (dataIndex * mpData->mDataStride) + mpData->getInfoTableEntry(infoIndex).ofs_data;//(char*)mpData + calcDataElementOffset(a) + mpData->mItemInfoTable[b].ofs_data;
 
-	switch (mpData->mItemInfoTable[b].value_type)
+	switch (mpData->mItemInfoTable[infoIndex].value_type)
 	{
 	case JMAP_VALUE_TYPE_STRING_REFERENCED:
 		*pOut = (const char*)mpData + calcDataElementOffset() + *(u32*)pData;
@@ -133,16 +143,6 @@ bool JMapInfo::getValueFast(int a, int b, const char** pOut) const
 	}
 
 	return true;
-}
-
-namespace {
-template <typename T>
-inline T acquire(const char* ptr)
-{
-	// TODO: Would this have existed for endianness conversion?
-
-	return *reinterpret_cast<const T*>(ptr);
-}
 }
 
 bool JMapInfo::getValueFast(int dataIndex, int infoIndex, u32* pOut) const
@@ -218,7 +218,6 @@ failure:
 
 #pragma region Searching
 
-MW_PRAG_OPT_S
 JMapInfoIter MR::findJMapInfoElementNoCase(const JMapInfo* pInfo, const char* path, const char* key, int startIndex)
 {
 	const char* acquired;
@@ -234,10 +233,7 @@ JMapInfoIter MR::findJMapInfoElementNoCase(const JMapInfo* pInfo, const char* pa
 	return pInfo->end();
 
 }
-MW_PRAG_END
 
-extern "C" int strcmp(const char * lhs, const char * rhs);
-MW_PRAG_OPT_S
 JMapInfoIter JMapInfo::findElementBinary(const char* path, const char* key) const
 {
 	int i = 0;
@@ -266,6 +262,5 @@ JMapInfoIter JMapInfo::findElementBinary(const char* path, const char* key) cons
 
 	return this->end();
 }
-MW_PRAG_END
 
 #pragma endregion

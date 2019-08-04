@@ -78,6 +78,4 @@ HitInfo.hpp
 KCollisionPlus.cpp
 KCollisionPlus.hpp
 
-JMapIdInfo.*
-JMapLinkInfo.*
 JMapUtil.*

@@ -134,18 +134,18 @@ public:
 
 		inline int get00() const
 		{
-			if (mpData)
-				return mpData->_00;
-			else
-				return 0;
+			return mpData ? mpData->_00 : 0;
 		}
 	protected:
 		inline int getNumData(bool valid) const;
-		
+
+		inline const JMapData* getData() const
+		{
+			return mpData;
+		}
 		inline int calcDataElementOffset(int idx) const
 		{
-			u32 stride = ((volatile JMapData*)mpData)->mDataStride;
-			return static_cast<int>(mpData->ofsData + (idx * stride));
+			return static_cast<int>(mpData->ofsData * (((volatile JMapData*)mpData)->mDataStride * idx));
 		}
 
 		inline int calcDataElementOffset() const

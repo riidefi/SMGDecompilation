@@ -19,6 +19,9 @@ typedef unk32 unk;
 #endif
 
 
+#define ensures(cond)
+#define expects(cond)
+
 #ifdef __CWCC__
 #define MWREG register
 #define CONST_MWREG register
@@ -38,6 +41,7 @@ typedef unk32 unk;
 #define FORCE_INLINE __inline
 
 #else
+#pragma Not CW
 #define asm
 #define MWREG
 #define CONST_MWREG const
