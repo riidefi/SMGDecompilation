@@ -55,38 +55,38 @@ void NameObj::setName(const char* name)
 
 void NameObj::executeMovement()
 {
-	if (!isFlag<FLAG_1_SUSPENDED>())
+	if (!isSuspended())
 		movement();
 }
 
 void NameObj::requestSuspend()
 {
-	if (isFlag<FLAG_4_RESUMING>())
-		disableFlag<FLAG_4_RESUMING>();
+	if (isResuming())
+		unsetResuming();
 
-	enableFlag<FLAG_2_SUSPENDING>();
+	setSuspending();
 }
 
 void NameObj::requestResume()
 {
-	if (isFlag<FLAG_2_SUSPENDING>())
-		disableFlag<FLAG_2_SUSPENDING>();
+	if (isSuspending())
+		unsetSuspending();
 
-	enableFlag<FLAG_4_RESUMING>();
+	setResuming();
 }
 
 void NameObj::syncWithFlags()
 {
-	if (isFlag<FLAG_2_SUSPENDING>())
+	if (isSuspending())
 	{
-		disableFlag<FLAG_2_SUSPENDING>();
-		enableFlag<FLAG_1_SUSPENDED>();
+		unsetSuspending();
+		setSuspend();
 	}
 
-	if (isFlag<FLAG_4_RESUMING>())
+	if (isResuming())
 	{
-		disableFlagBits<FLAG_4_RESUMING>();
-		disableFlagBits16<FLAG_1_SUSPENDED>();
+		unsetResuming();
+		unsetSuspend();
 	}
 }
 
