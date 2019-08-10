@@ -136,11 +136,23 @@ VolumeModelDrawer.*
 
 ModelChangableObjFactory.*
 MovementOnOffGroupHolder.*
-NameObjArchiveListCollector.*
 NameObjCategoryList.*
 NameObjExecuteHolder.*
 NameObjFactory.*
 NameObjFinder.*
-NameObjGroup.*
 NameObjHolder.*
 NameObjListExecutor.*
+
+# Animation WIP files
+AnmPlayer.*
+BckCtrl.*
+BpkPlayer.*
+BrkPlayer.*
+BtkPlayer.*
+BtpPlayer.*
+BvaPlayer.*
+LayoutAnmPlayer.*
+MaterialAnmBuffer.*
+XanimeCore.*
+XanimePlayer.*
+XanimeResource.*

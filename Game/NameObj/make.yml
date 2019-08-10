@@ -2,3 +2,5 @@ sources:
  'NameObj.cpp':         'NameObj/NameObj'
  'NameObjRegister.cpp': 'NameObj/NameObjRegister'
  'NameObjAdaptor.cpp':  'NameObj/NameObjAdaptor'
+ 'NameObjGroup.cpp':        'NameObj/NameObjGroup'
+ 'NameObjArchiveListCollector.cpp': 'NameObj/NameObjArchiveListCollector'

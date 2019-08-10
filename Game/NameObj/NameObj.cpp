@@ -13,7 +13,7 @@ NameObjRegister* SingletonHolder<NameObjRegister>::sInstance;
 
 
 NameObj::NameObj(const char* name)
-	: mName(name), mFlag(0), _A(-1)
+	: mName(name), mFlag(0), _0A(-1)
 {
 	SingletonHolder<NameObjRegister>::ref().add(this);
 }
