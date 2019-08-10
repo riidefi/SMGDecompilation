@@ -74,7 +74,6 @@ KCollisionPlus.*
 JMapUtil.*
 
 
-ActiveActorList.*
 ActorAnimKeeper.*
 ActorCameraInfo.*
 ActorJointCtrl.*
@@ -133,3 +132,15 @@ SimpleJ3DModelDrawer.*
 SpotMarkLight.*
 ViewGroupCtrl.*
 VolumeModelDrawer.*
+
+
+ModelChangableObjFactory.*
+MovementOnOffGroupHolder.*
+NameObjArchiveListCollector.*
+NameObjCategoryList.*
+NameObjExecuteHolder.*
+NameObjFactory.*
+NameObjFinder.*
+NameObjGroup.*
+NameObjHolder.*
+NameObjListExecutor.*

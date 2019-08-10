@@ -145,7 +145,7 @@ public:
 		}
 		inline int calcDataElementOffset(int idx) const
 		{
-			return static_cast<int>(mpData->ofsData * (((volatile JMapData*)mpData)->mDataStride * idx));
+			return static_cast<int>(mpData->ofsData + (((volatile JMapData*)mpData)->mDataStride * idx));
 		}
 
 		inline int calcDataElementOffset() const

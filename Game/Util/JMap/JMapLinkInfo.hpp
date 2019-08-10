@@ -6,6 +6,7 @@
 #pragma once
 
 class JMapInfoIter;
+
 enum JMapInfoType
 {
 	JMAP_INFO_TYPE_UNDEFINED = -1,
@@ -16,6 +17,7 @@ enum JMapInfoType
 
 	JMAP_INFO_TYPE_MAX
 };
+
 class JMapLinkInfo
 {
 public:

@@ -36,7 +36,7 @@ JMapIdInfo getJMapInfoGroupID(const JMapInfoIter& src_it)
 }
 JMapIdInfo createJMapIdInfoFromClippingGroupId(const JMapInfoIter& src_it)
 {
-	long acquired = -1;
+	s32 acquired = -1;
 	getJMapInfoClippingGroupID(src_it, &acquired);
 	
 	return JMapIdInfo(acquired, src_it);

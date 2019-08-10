@@ -15,35 +15,18 @@
 namespace
 {
 // .data
-
-// TODO: Type name FollowInfoTag?
-
-const char* sFollowInfoTagName[JMAP_INFO_TYPE_MAX]
-#ifndef INTERN_DATA
-;
-#else
-= {
+const char* sFollowInfoTagName[3] = {
 	"MapParts_ID",
 	"Obj_ID",
 	"ChildObjId"
 };
-#endif
-const char* sInfoNameTable[JMAP_INFO_TYPE_MAX]
-#ifndef INTERN_DATA
-;
-#else
-= {
+const char* sInfoNameTable[3] = {
 	"mappartsinfo",
 	"objinfo",
 	"childobjinfo"
 };
-#endif
 
 }
-
-// literal linker restriction
-extern const char aLId_0[];
-
 
 JMapLinkInfo::JMapLinkInfo(const JMapInfoIter& iter, bool b)
 	: mLinkId(-1), mPlacedZoneId(-1), mInfoType(-1)
@@ -74,6 +57,17 @@ namespace MR
 {
 extern bool isEqualString(const char*, const char*);
 }
+
+static inline int search(const char* key)
+{
+	for (int i = 0; i < JMAP_INFO_TYPE_MAX; i++)
+	{
+		if (MR::isEqualString(key, sInfoNameTable[i]))
+			return i;
+	}
+	return -1;
+}
+
 void JMapLinkInfo::setLinkedInfo(const JMapInfoIter& iter)
 {
 	invalidate();
@@ -82,24 +76,13 @@ void JMapLinkInfo::setLinkedInfo(const JMapInfoIter& iter)
 		return;
 
 	s32 acquired = -1;
-	if (!iter.getValue<s32>(aLId_0, &acquired)) // "l_id"
+	if (!iter.getValue<s32>("l_id", &acquired))
 		return;
 
 	mLinkId = acquired;
 	mPlacedZoneId = MR::getPlacedZoneId(iter);
 
-	const char* name = iter.getInfo()->getName();
-
-	int result;
-	for (int i = 0; i < JMAP_INFO_TYPE_MAX; i++)
-	{
-		if (MR::isEqualString(name, sInfoNameTable[i]))
-			goto found;
-	}
-	result = -1;
-
-found:
-	mInfoType = static_cast<JMapInfoType>(result);
+	mInfoType = (JMapInfoType)search(iter.getInfo()->getName());
 }
 void JMapLinkInfo::setLinkInfo(const JMapInfoIter& iter)
 {
@@ -114,28 +97,26 @@ void JMapLinkInfo::setLinkInfo(const JMapInfoIter& iter)
 
 	int linkid = -1;
 	int infotype = -1;
-	bool found = false;
+	int found = false;
 
 	for (int i = 0; i < JMAP_INFO_TYPE_MAX; i++)
 	{
 		s32 acquired = -1;
 		iter.getValue<s32>(sFollowInfoTagName[i], &acquired);
 
-		if (acquired > 0)
+		if (acquired >= 0 && !found)
 		{
-			if (!found)
-			{
-				linkid	 = acquired;
-				infotype = i;
-				found	 = true;
-			}
+			linkid	 = acquired;
+			infotype = i;
+			found	 = true;
 		}
 	}
-
+#if 0
 	if (found)
 	{
 		mLinkId   = linkid;
 		mInfoType = infotype;
 		mPlacedZoneId = MR::getPlacedZoneId(iter); // Useless -- we already set it above
 	}
+#endif
 }

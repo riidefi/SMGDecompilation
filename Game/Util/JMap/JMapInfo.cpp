@@ -131,15 +131,17 @@ JMapValueType JMapInfo::getValueType(const char* path) const
 
 bool JMapInfo::getValueFast(int dataIndex, int infoIndex, const char** pOut) const
 {
-	const char* pData = (char*)mpData + mpData->ofsData + (dataIndex * mpData->mDataStride) + mpData->getInfoTableEntry(infoIndex).ofs_data;//(char*)mpData + calcDataElementOffset(a) + mpData->mItemInfoTable[b].ofs_data;
+	const char* pData = (char*)mpData + mpData->ofsData + (dataIndex * mpData->mDataStride) + mpData->getInfoTableEntry(infoIndex).ofs_data;
+	const JMapData::ItemInfo& info = mpData->getInfoTableEntry(infoIndex);
 
-	switch (mpData->mItemInfoTable[infoIndex].value_type)
+	switch (info.value_type)
 	{
 	case JMAP_VALUE_TYPE_STRING_REFERENCED:
 		*pOut = (const char*)mpData + calcDataElementOffset() + *(u32*)pData;
 		break;
 	default:
 		*pOut = (const char*)pData;
+		break;
 	}
 
 	return true;

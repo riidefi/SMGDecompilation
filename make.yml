@@ -1,0 +1,5 @@
+children:
+  # Code specific to the game.
+  - Game
+  # Common code between Nintendo games.
+  # - JSystem
