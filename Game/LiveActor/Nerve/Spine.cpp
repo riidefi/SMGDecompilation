@@ -3,7 +3,7 @@
  * @brief Implementations for the spine class.
  */
 
-#include <LiveActor/Spine.hpp>
+#include "Spine.hpp"
 
 Spine::Spine(void* pExecutor, Nerve const* pNerve)
 {

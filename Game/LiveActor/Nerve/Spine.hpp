@@ -5,8 +5,9 @@
 
 #pragma once
 
-#include <LiveActor/Nerve.hpp>
-#include <LiveActor/ActorStateKeeper.hpp>
+#include <LiveActor/Nerve/Nerve.hpp>
+
+class ActorStateKeeper;
 
 class Spine
 {
@@ -18,7 +19,7 @@ public:
 	void changeNerve();
 	void initStateKeeper(int unk_param);
 
-	inline int getStep() const noexcept
+	int getStep() const noexcept
 	{
 		return mStep;
 	}

@@ -3,3 +3,4 @@ children:
   - Game
   # Common code between Nintendo games.
   # - JSystem
+  # - Library
