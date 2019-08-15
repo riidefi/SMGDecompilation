@@ -56,7 +56,7 @@ Water/
 GravityDust.*
 SpaceInner.*
 
-Actor/
+
 Draw/
 Fur/
 Joint/
@@ -73,6 +73,14 @@ HitInfo.
 KCollisionPlus.*
 
 JMapUtil.*
+
+ActorCameraUtil.*
+ActorMovementUtil.*
+ActorSensorUtil.*
+ActorShadowLocalUtil.*
+ActorShadowUtil.*
+ActorStateUtil.*
+ActorSwitchUtil.*
 
 
 ActorAnimKeeper.*

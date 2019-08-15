@@ -20,11 +20,15 @@ extern u32 getRaceBestTime(int);
 extern u32 getRaceCurrentTime();
 extern bool isPlayerLuigi();
 
+extern "C" int snprintf(char*, u32, const char*, ...);
 
-int addFilePrefix(char* dest, u32 len, const char* a, const char*b)
+int addFilePrefix(char* dest, u32 len, const char* a, const char* b)
 {
-	return snprintf(dest, len, "%s/%s", b, a[0] == '/' ? a + 1 : a);
+	const char* x = a;
+	if (*a == '/') x++;
+	return snprintf(dest, len, "%s/%s", b, x);
 }
+
 extern wchar_t* getGameMessageDirect(const char*);
 // TODO: Once ReplaceTagFunction is done, document all thiis
 void makeDateString(wchar_t* a, s32 b, s32 c, s32 d, s32 e)
@@ -213,7 +217,7 @@ int getStringLengthWithMessageTag(const wchar_t* str)
 // SCANNERS
 //
 #define MR_SCAN_IMPL(name, type, str) \
-	void scan##name(const char* source, char* search, type* dest) { \
+	void scan##name(const char* source, const char* search, type* dest) { \
 		if (strstr(source, search)) { \
 			type tmp; \
 			sscanf(source, str, &tmp); \
@@ -222,7 +226,7 @@ int getStringLengthWithMessageTag(const wchar_t* str)
 	}
 
 #define MR_SCAN_VEC4_IMPL_EX(type, str, suffix) \
-	void scan##type##suffix(const char* source, char* search, type* dest) { \
+	void scan##type##suffix(const char* source, const char* search, type* dest) { \
 		if (strstr(source, search)) { \
 			type tmp[4]; \
 			sscanf(source, str, &tmp[0], &tmp[1], &tmp[2], &tmp[3]); \
@@ -240,7 +244,6 @@ void scan32(const char* source, const char* search, s32* dest)
 	if (strstr(source, search))
 		sscanf(source, "\t%d", dest);
 }
-MR_SCAN_IMPL(32, s32, "\t%d");
 MR_SCAN_IMPL(16, u16, "\t%d");
 MR_SCAN_IMPL(8, u8, "\t%d");
 MR_SCAN_IMPL(f32, f32, "\t%ff");
@@ -248,5 +251,7 @@ MR_SCAN_IMPL(f32, f32, "\t%ff");
 // Vector scanners
 
 MR_SCAN_VEC4_IMPL(u8, "\t{%d,%d,%d,%d}");
+MR_SCAN_VEC4_IMPL(u16, "\t{%d,%d,%d,%d}");
+// TODO: f32 scanner is speciall
 MR_SCAN_VEC4_IMPL(f32, "\t{%ff,%ff,%ff,%ff}");
 }

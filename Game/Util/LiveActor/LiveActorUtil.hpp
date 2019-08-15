@@ -259,7 +259,7 @@ void setBinderExceptActor(LiveActor *param_1,LiveActor *param_2);
 unsigned int isExistBinder(LiveActor *param_1);
 void onEntryDrawBuffer(LiveActor *param_1);
 void offEntryDrawBuffer(LiveActor *param_1);
-unsigned int isDead(LiveActor *param_1);
+unsigned int isDead(const LiveActor*);
 unsigned int isHiddenModel(LiveActor *param_1);
 void showModel(LiveActor *param_1);
 void hideModel(LiveActor *param_1);

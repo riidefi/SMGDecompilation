@@ -52,6 +52,6 @@ struct TVec3
 };
 
 
-typedef TVec3<f> TVec3f; // <f>
+typedef TVec3<f32> TVec3f;
 
 } // namespace JGeometry
