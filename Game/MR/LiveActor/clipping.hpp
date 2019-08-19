@@ -3,6 +3,7 @@
 #include "smg_types.h"
 
 class LiveActor;
+class JMapInfoIter;
 
 namespace MR {
 

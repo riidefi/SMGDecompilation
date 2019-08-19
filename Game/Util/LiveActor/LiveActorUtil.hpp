@@ -14,13 +14,13 @@ class LiveActor;
 namespace MR {
 
 // Gfx: indirect texture, mirror reflection
-#include "MR/LiveActor/gfx.hpp"
+#include "Game/MR/LiveActor/gfx.hpp"
 
 // Collision Creation
-#include "MR/LiveActor/collision_create.hpp"
+#include "Game/MR/LiveActor/collision_create.hpp"
 
 // Special Models
-#include "MR/LiveActor/special_model.hpp"
+#include "Game/MR/LiveActor/special_model.hpp"
 
 // Misc
 void tryCreateMirrorActor(LiveActor *param_1,char *param_2);
@@ -28,77 +28,77 @@ void changeBckForEffectKeeper(LiveActor *param_1);
 
 // Collision Matrix
 // TODO: Move copyTransRotateScale if necessary
-#include "MR/LiveActor/collision_matrix.hpp" 
+#include "Game/MR/LiveActor/collision_matrix.hpp" 
 
 // Properties
-#include "MR/LiveActor/properties.hpp"
+#include "Game/MR/LiveActor/properties.hpp"
 
 // Clipping
-#include "MR/LiveActor/clipping.hpp"
+#include "Game/MR/LiveActor/clipping.hpp"
 
 // Base transform
-#include "MR/LiveActor/base_xform.hpp"
+#include "Game/MR/LiveActor/base_xform.hpp"
 
 // Resources
-#include "MR/LiveActor/resource.hpp"
+#include "Game/MR/LiveActor/resource.hpp"
 
 // Display list maker + buffer
-#include "MR/LiveActor/dl_maker.hpp"
+#include "Game/MR/LiveActor/dl_maker.hpp"
 
 // Action
-#include "MR/LiveActor/action.hpp"
+#include "Game/MR/LiveActor/action.hpp"
 
 // Animation
-#include "MR/LiveActor/animation.hpp"
+#include "Game/MR/LiveActor/animation.hpp"
 
 // Light
-#include "MR/LiveActor/lighting.hpp"
+#include "Game/MR/LiveActor/lighting.hpp"
 
 // Step
-#include "MR/LiveActor/step.hpp"
+#include "Game/MR/LiveActor/step.hpp"
 
 // Nerve
-#include "MR/LiveActor/nerve.hpp"
+#include "Game/MR/LiveActor/nerve.hpp"
 
 // Collision Vector Math
-#include "MR/LiveActor/collision_math.hpp"
+#include "Game/MR/LiveActor/collision_math.hpp"
 
 // Bindings
-#include "MR/LiveActor/bindings.hpp"
+#include "Game/MR/LiveActor/bindings.hpp"
 
 // Draw Buffer Entry
-#include "MR/LiveActor/draw_buffer_entry.hpp"
+#include "Game/MR/LiveActor/draw_buffer_entry.hpp"
 
 // Misc
-#include "MR/LiveActor/misc.hpp"
+#include "Game/MR/LiveActor/misc.hpp"
 
 // Group
-#include "MR/LiveActor/group.hpp"
+#include "Game/MR/LiveActor/group.hpp"
 
 // Gravity Calculation
-#include "MR/LiveActor/calc_gravity.hpp"
+#include "Game/MR/LiveActor/calc_gravity.hpp"
 
 // Fur
-#include "MR/LiveActor/fur.hpp"
+#include "Game/MR/LiveActor/fur.hpp"
 
 // Collision Parts
-#include "MR/LiveActor/collision_parts.hpp"
+#include "Game/MR/LiveActor/collision_parts.hpp"
 
 // Model Obj, Map Obj, Parts Model (TODO: split?)
-#include "MR/LiveActor/model.hpp"
+#include "Game/MR/LiveActor/model.hpp"
 
 // LOD Control
-#include "MR/LiveActor/lod_ctrl.hpp"
+#include "Game/MR/LiveActor/lod_ctrl.hpp"
 
 // TODO: Likely below here because they operate on the scene, might be better split
 
 // Map Flag
-#include "MR/LiveActor/flag.hpp"
+#include "Game/MR/LiveActor/flag.hpp"
 
 void stopSceneAtStep(LiveActor *param_1,long param_2,long param_3);
 
 // Rumble
-#include "MR/LiveActor/rumble.hpp"
+#include "Game/MR/LiveActor/rumble.hpp"
 
 //void __thiscall setLoopFrame(JAUSoundAnimator *this,float param_1,float param_2);
 }
