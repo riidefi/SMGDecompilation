@@ -139,9 +139,9 @@ protected:
 		void setUsingCast(const JGeometry::TVec3f& src)
 		{
 			// fctiwz/stfd/lwz
-			_x = static_cast<int>(src._x._f32);
-			_y = static_cast<int>(src._y._f32);
-			_z = static_cast<int>(src._z._f32);
+			_x = static_cast<int>(src._x);
+			_y = static_cast<int>(src._y);
+			_z = static_cast<int>(src._z);
 		}
 	};
 };
