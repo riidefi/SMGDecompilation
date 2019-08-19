@@ -2,17 +2,56 @@
 
 #include "smg_types.h"
 
-class LiveActor;
+class const LiveActor;
 
-class TVec3;
 
 namespace MR {
 
-unsigned int isStep(LiveActor *param_1,long param_2);
-void isFirstStep(LiveActor *param_1);
-unsigned int isLessStep(LiveActor *param_1,long param_2);
-int isLessEqualStep(LiveActor *param_1,long param_2);
-unsigned int isGreaterStep(LiveActor *param_1,long param_2);
-int isGreaterEqualStep(LiveActor *param_1,long param_2);
-unsigned int isIntervalStep(LiveActor *param_1,long param_2);
+//! @brief @return If the actor's step is equal to the reference step.
+//!
+//! @param[in] pActor The concerning actor.
+//! @param[in] step	  The reference step.
+//!
+bool isStep(const LiveActor* pActor, s32 step);
+
+//! @brief @return If the actor's step is its first.
+//!
+//! @param[in] pActor The concerning actor.
+//!
+bool isFirstStep(const LiveActor* pActor);
+
+//! @brief @return If the actor's step is less than the reference step.
+//!
+//! @param[in] pActor The concerning actor.
+//! @param[in] step	  The reference step.
+//!
+bool isLessStep(const LiveActor* pActor, s32 step);
+
+//! @brief @return If the actor's step is less than or equal to the reference step.
+//!
+//! @param[in] pActor The concerning actor.
+//! @param[in] step	  The reference step.
+//!
+bool isLessEqualStep(const LiveActor* pActor, s32 step);
+
+//! @brief @return If the actor's step is greater than the reference step.
+//!
+//! @param[in] pActor The concerning actor.
+//! @param[in] step	  The reference step.
+//!
+bool isGreaterStep(const LiveActor* pActor, s32 step);
+
+//! @brief @return If the actor's step is greater than or equal to the reference step.
+//!
+//! @param[in] pActor The concerning actor.
+//! @param[in] step	  The reference step.
+//!
+bool isGreaterEqualStep(const LiveActor* pActor, s32 step);
+
+//! @brief @return If the actor's step is an interval of the reference step.
+//!
+//! @param[in] pActor The concerning actor.
+//! @param[in] step	  The reference step.
+//!
+bool isIntervalStep(const LiveActor* pActor, s32 step);
 } // namespace MR

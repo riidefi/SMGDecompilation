@@ -176,4 +176,44 @@ bool tryStartAction(const LiveActor* pActor, const char* action)
 
 #pragma endregion
 
+#pragma region Step
+// step.hpp
+
+bool isStep(const LiveActor* pActor, s32 step)
+{
+	return pActor->getNerveStep() == step;
+}
+
+bool isFirstStep(const LiveActor* pActor)
+{
+	return isStep(pActor, 0);
+}
+
+bool isLessStep(const LiveActor* pActor, s32 step)
+{
+	return pActor->getNerveStep() < step;
+}
+
+bool isLessEqualStep(const LiveActor* pActor, s32 step)
+{
+	return pActor->getNerveStep() <= step;
+}
+
+bool isGreaterStep(const LiveActor* pActor, s32 step)
+{
+	return pActor->getNerveStep() > step;
+}
+
+bool isGreaterEqualStep(const LiveActor* pActor, s32 step)
+{
+	return pActor->getNerveStep() >= step;
+}
+
+bool isIntervalStep(const LiveActor* pActor, s32 step)
+{
+	return pActor->getNerveSStep() % step == 0;
+}
+
+#pragma endregion
+
 } // namespace MR
