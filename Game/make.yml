@@ -1,4 +1,5 @@
 children:
   - NameObj
   - LiveActor
+  - MapObj
 #  - Util

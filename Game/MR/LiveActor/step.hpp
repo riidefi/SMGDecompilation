@@ -2,7 +2,7 @@
 
 #include "smg_types.h"
 
-class const LiveActor;
+class LiveActor;
 
 
 namespace MR {

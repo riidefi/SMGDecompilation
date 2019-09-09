@@ -6,6 +6,7 @@ class LiveActor;
 class HitSensor;
 class undefined4;
 class JMapInfoIter;
+struct TVec3;
 namespace MR {
 
 unsigned int isOnGround(LiveActor *param_1);

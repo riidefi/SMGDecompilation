@@ -14,18 +14,18 @@ namespace {
 // .sdata
 
 //! The alpha TEV operation -- A.alpha > B.alpha
-const GXTevOp sAlphaTevOperater = GX_TEV_COMP_A8_GT;
+static GXTevOp sAlphaTevOperater = GX_TEV_COMP_A8_GT;
 
 // Blend mode -- src*src_alpha + efb*(1-src_alpha)
-const GXBlendMode sFillBlendMode = GX_BM_BLEND;
-const GXBlendFactor sFillSrcFactor = GX_BL_SRCALPHA;
-const GXBlendFactor sFillDstFactor = GX_BL_INVSRCALPHA;
-const GXLogicOp sFillLogicOp = GX_LO_NOOP; // only applicable for logic blending
+static GXBlendMode sFillBlendMode = GX_BM_BLEND;
+static GXBlendFactor sFillSrcFactor = GX_BL_SRCALPHA;
+static GXBlendFactor sFillDstFactor = GX_BL_INVSRCALPHA;
+static GXLogicOp sFillLogicOp = GX_LO_NOOP; // only applicable for logic blending
 
 // .sbss
 
-GXColor sFillColor {   0,   0,   0, 255 };
-GXColor sEdgeColor {   0, 046, 200, 128 };
+Color8 sFillColor = Color8(   0,   0,   0, 255);
+Color8 sEdgeColor = Color8(   0, 046, 200, 128);
 }
 
 
@@ -46,16 +46,17 @@ void FallOutFieldDraw::setUpFillScreen() const
 	GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
 
 	// Copy construction to GXColor not optimized out
-	GXSetTevKColor(GX_KCOLOR0, Color8{ 0, 0, 0, 1 });
+	GXSetTevKColor(GX_KCOLOR0, Color8(0, 0, 0, 1));
 	GXSetTevKAlphaSel(GX_TEVSTAGE0, GX_TEV_KASEL_K0_A);
 
-	// bFlipLerp set:   (1-A0)*TEXA+(A0)*KONST
 	// bFlipLerp unset: (1-A0)*KONST+(A0)*TEXA
+	// bFlipLerp set:   (1-A0)*TEXA+(A0)*KONST
 	GXSetTevAlphaIn(GX_TEVSTAGE0,
 		bFlipLerp ? GX_CA_TEXA : GX_CA_KONST,
 		bFlipLerp ? GX_CA_KONST : GX_CA_TEXA,
 		GX_CA_A0,
 		GX_CA_ZERO);
+
 	GXSetTevAlphaOp(GX_TEVSTAGE0, sAlphaTevOperater, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
 
 	// > 0 && true
@@ -138,10 +139,10 @@ void FallOutFieldDraw::draw() const
 	{
 		ImageEffectLocalUtil::capture(screen_alpha_tex2, 0, 1, GX_CTF_A8, true, 0);
 
-		GXSetTevKColor(GX_KCOLOR0, Color8{ 0, 0, 0, 1 });
+		GXSetTevKColor(GX_KCOLOR0, Color8(0, 0, 0, 1));
 		GXSetTevKAlphaSel(GX_TEVSTAGE0, GX_TEV_KASEL_K0_A);
 		GXSetTevKColorSel(GX_TEVSTAGE0, GX_TEV_KCSEL_K0_A);
-		GXSetTevColor(GX_TEVREG0, Color8{ 0xff, 0xff, 0xff, 0xff });
+		GXSetTevColor(GX_TEVREG0, Color8(0xff, 0xff, 0xff, 0xff));
 
 		// bFlipLerp set:   (1-0)*TEXA+(0)*KONST
 		// bFlipLerp unset: (1-0)*KONST+(0)*TEXA
@@ -164,8 +165,8 @@ void FallOutFieldDraw::draw() const
 		// Update only alpha component
 		GXSetColorUpdate(0);
 		GXSetAlphaUpdate(1);
-		// Always write alpha zero
-		GXSetDstAlpha(0, 0);
+		// Disable constant alpha write
+		GXSetDstAlpha(GX_FALSE, 0);
 		// Always write 0 to z buffer
 		GXSetZScaleOffset(0.0f, 0.0f);
 
@@ -188,7 +189,7 @@ void FallOutFieldDraw::draw() const
 	{
 		ImageEffectLocalUtil::capture(edge_and_clear_tex, 4, 4, GX_CTF_A8, false, 0);
 		setUpEdgeAndClearAlpha();
-		ImageEffectLocalUtil::drawTexture(edge_and_clear_tex, 1, 0, -1, 2);
+		ImageEffectLocalUtil::drawTexture(edge_and_clear_tex, 1, 0, -1, ImageEffectLocalUtil::TEX_DRAW_TYPE_2);
 	}
 
 	// Fill screen effect

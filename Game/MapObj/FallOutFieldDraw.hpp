@@ -47,14 +47,13 @@ private:
 	bool bFlipLerp; //!< Whether or not to swap color-texture linear interpolations.
 };
 
-struct Color8
+struct Color8 : public GXColor
 {
 	u8 r, g, b, a;
 
-	operator GXColor()
-	{
-		return GXColor{ r, g, b, a };
-	}
+	Color8(u8 _r, u8 _g, u8 _b, u8 _a);
+	//	: r(_r), g(_g), b(_b), a(_a)
+	//{}
 };
 
 // MR implementations
@@ -88,7 +87,8 @@ namespace ImageEffectLocalUtil
 {
 enum ETexDrawType
 {
-	TEX_DRAW_TYPE_0
+	TEX_DRAW_TYPE_0,
+	TEX_DRAW_TYPE_2 = 2
 };
 void setupDrawTexture();
 void capture(JUTTexture*, s32, s32, GXTexFmt, bool, u8);
