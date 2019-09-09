@@ -11,22 +11,27 @@ class FunctorBase
 public:
 	virtual void		 operator()() = 0;
 	virtual FunctorBase* clone(JKRHeap* pHeap) const = 0;
-
-	unk32  _04;
-	unk32  _08;
-	unk32  _0C;
-	unk32  _10;
 };
 
-template<typename T, void* T2>
+template<typename TCaller, typename TCallee>
 class FunctorV0M : public FunctorBase
 {
 public:
 	// TODO
-	virtual void		operator()()
-		; // {}
-	virtual FunctorV0M* clone(JKRHeap* pHeap) const
-		; // {}
+	void		operator()() override;
+	FunctorV0M* clone(JKRHeap* pHeap) const override;
+	
+	TCaller mCaller;
+	TCallee mCallee;
+
+	inline FunctorV0M(TCaller caller, TCallee callee)
+		 : mCaller(caller), mCallee(callee)
+	{}
 };
 
+template<typename T>
+FunctorV0M<T*, void (T::*)()> Functor(T* pCaller, void (T::*pCallee)())
+{
+	return FunctorV0M<T*, void (T::*)()>(pCaller, pCallee);
+}
 } // namespace MR
