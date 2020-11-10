@@ -1,0 +1,3 @@
+[submodule "WiiCore"]
+	path = WiiCore
+	url = https://github.com/riidefi/WiiCore.git

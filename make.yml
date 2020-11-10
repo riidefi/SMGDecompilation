@@ -4,3 +4,5 @@ children:
   # Common code between Nintendo games.
   # - JSystem
   # - Library
+sources:
+  'WiiCore/source/rx/rxArchive.c': 'arc/arc'
