@@ -109,9 +109,8 @@ void FallOutFieldDraw::init(const JMapInfoIter& it)
 		return;
 	}
 
-	MR::FunctorV0M<FallOutFieldDraw*, void (FallOutFieldDraw::*)()> fDeactivate = MR::Functor<FallOutFieldDraw>(this, &deactivate);
-	MR::FunctorV0M<FallOutFieldDraw*, void (FallOutFieldDraw::*)()> fActivate = MR::Functor<FallOutFieldDraw>(this, &activate);
-	MR::listenNameObjStageSwitchOnOffAppear(this, MR::createStageSwitchCtrl(this, it), fDeactivate, fActivate);
+	MR::listenNameObjStageSwitchOnOffAppear(this, MR::createStageSwitchCtrl(this, it),
+		makeActivate(), makeDeactivate());
 	MR::deactivateClipArea();
 }
 

@@ -17,11 +17,11 @@ struct FunctorBase
 template<typename TCaller, typename TCallee>
 struct FunctorV0M : public FunctorBase
 {
-	void		operator()() const override
+	virtual void		operator()() const override
 	{
 		//mCaller->*mCallee();
 	}
-	FunctorV0M* clone(JKRHeap* pHeap) const override
+	virtual FunctorV0M* clone(JKRHeap* pHeap) const override
 	{
 		return new (pHeap, 20) FunctorV0M(*this);
 	}
@@ -37,7 +37,7 @@ struct FunctorV0M : public FunctorBase
 };
 
 template<typename T>
-inline FunctorV0M<T*, void (T::*)()> Functor(T* pCaller, void (T::*pCallee)())
+static FunctorV0M<T*, void (T::*)()> Functor(T* pCaller, void (T::*pCallee)())
 {
 	return FunctorV0M<T*, void (T::*)()>(pCaller, pCallee);
 }

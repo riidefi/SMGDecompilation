@@ -9,6 +9,8 @@
 #include <Game/NameObj/NameObj.hpp>
 #include <revolution/gx.h>
 
+#include <Game/MR/Functor/Functor.hpp>
+
 class FallOutFieldDraw : public NameObj
 {
 public:
@@ -45,6 +47,15 @@ public:
 
 private:
 	bool bFlipLerp; //!< Whether or not to swap color-texture linear interpolations.
+
+	MR::FunctorV0M<FallOutFieldDraw*, void (FallOutFieldDraw::*)()> makeActivate()
+	{
+		return MR::Functor<FallOutFieldDraw>(this, &activate);
+	}
+	MR::FunctorV0M<FallOutFieldDraw*, void (FallOutFieldDraw::*)()> makeDeactivate()
+	{
+		return MR::Functor<FallOutFieldDraw>(this, &deactivate);
+	}
 };
 
 struct Color8 : public GXColor
