@@ -1,0 +1,50 @@
+; Generated with ikazuchi 1.0 by riidefi
+; Object File: AXFXHooks
+; Segments:
+;     .text:       0x804cb90c -> 0x804cb944
+;     .sdata:      0x806b2bb0 -> 0x806b2bb8
+
+
+; Symbols Defined
+; 804cb90c -> 804cb918 __AXFXAllocFunction
+; 804cb918 -> 804cb924 __AXFXFreeFunction
+; 804cb924 -> 804cb930 AXFXSetHooks
+; 804cb930 -> 804cb944 AXFXGetHooks
+; 806b2bb0 -> 806b2bb4 __AXFXAlloc
+; 806b2bb4 -> 806b2bb8 __AXFXFree
+
+
+; Exports
+.global __AXFXAllocFunction
+.global __AXFXFreeFunction
+.global AXFXSetHooks
+.global AXFXGetHooks
+.global __AXFXAlloc
+.global __AXFXFree
+
+
+; Segments
+.section .text
+__AXFXAllocFunction:
+.byte 0x7C, 0x64, 0x1B, 0x78 # 804cb90c
+.byte 0x80, 0x6D, 0x94, 0x20 # 804cb910
+.byte 0x4B, 0xFD, 0x90, 0x68 # 804cb914
+__AXFXFreeFunction:
+.byte 0x7C, 0x64, 0x1B, 0x78 # 804cb918
+.byte 0x80, 0x6D, 0x94, 0x20 # 804cb91c
+.byte 0x4B, 0xFD, 0x91, 0x54 # 804cb920
+AXFXSetHooks:
+.byte 0x90, 0x6D, 0x95, 0x90 # 804cb924
+.byte 0x90, 0x8D, 0x95, 0x94 # 804cb928
+.byte 0x4E, 0x80, 0x00, 0x20 # 804cb92c
+AXFXGetHooks:
+.byte 0x80, 0x0D, 0x95, 0x90 # 804cb930
+.byte 0x90, 0x03, 0x00, 0x00 # 804cb934
+.byte 0x80, 0x0D, 0x95, 0x94 # 804cb938
+.byte 0x90, 0x04, 0x00, 0x00 # 804cb93c
+.byte 0x4E, 0x80, 0x00, 0x20 # 804cb940
+.section .sdata
+__AXFXAlloc:
+.byte 0x80, 0x4C, 0xB9, 0x0C # 806b2bb0
+__AXFXFree:
+.byte 0x80, 0x4C, 0xB9, 0x18 # 806b2bb4

@@ -1,0 +1,110 @@
+; Generated with ikazuchi 1.0 by riidefi
+; Object File: OSArena
+; Segments:
+;     .text:       0x804a4bd8 -> 0x804a4c6c
+;     .sdata:      0x806b2a48 -> 0x806b2a50
+;     .sbss:       0x806b7688 -> 0x806b7690
+
+
+; Symbols Defined
+; 804a4bd8 -> 804a4be0 OSGetMEM1ArenaHi
+; 804a4be0 -> 804a4be8 OSGetMEM2ArenaHi
+; 804a4be8 -> 804a4bf0 OSGetArenaHi
+; 804a4bf0 -> 804a4bf8 OSGetMEM1ArenaLo
+; 804a4bf8 -> 804a4c00 OSGetMEM2ArenaLo
+; 804a4c00 -> 804a4c08 OSGetArenaLo
+; 804a4c08 -> 804a4c10 OSSetMEM1ArenaHi
+; 804a4c10 -> 804a4c18 OSSetMEM2ArenaHi
+; 804a4c18 -> 804a4c20 OSSetArenaHi
+; 804a4c20 -> 804a4c28 OSSetMEM1ArenaLo
+; 804a4c28 -> 804a4c30 OSSetMEM2ArenaLo
+; 804a4c30 -> 804a4c38 OSSetArenaLo
+; 804a4c38 -> 804a4c6c OSAllocFromMEM1ArenaLo
+; 806b2a48 -> 806b2a4c __OSArenaLo
+; 806b2a4c -> 806b2a50 s_mem2ArenaLo
+; 806b7688 -> 806b768c __OSArenaHi
+; 806b768c -> 806b7690 s_mem2ArenaHi
+
+
+; Exports
+.global OSGetMEM1ArenaHi
+.global OSGetMEM2ArenaHi
+.global OSGetArenaHi
+.global OSGetMEM1ArenaLo
+.global OSGetMEM2ArenaLo
+.global OSGetArenaLo
+.global OSSetMEM1ArenaHi
+.global OSSetMEM2ArenaHi
+.global OSSetArenaHi
+.global OSSetMEM1ArenaLo
+.global OSSetMEM2ArenaLo
+.global OSSetArenaLo
+.global OSAllocFromMEM1ArenaLo
+.global __OSArenaLo
+.global s_mem2ArenaLo
+.global __OSArenaHi
+.global s_mem2ArenaHi
+
+
+; Segments
+.section .text
+OSGetMEM1ArenaHi:
+.byte 0x80, 0x6D, 0xE0, 0x68 # 804a4bd8
+.byte 0x4E, 0x80, 0x00, 0x20 # 804a4bdc
+OSGetMEM2ArenaHi:
+.byte 0x80, 0x6D, 0xE0, 0x6C # 804a4be0
+.byte 0x4E, 0x80, 0x00, 0x20 # 804a4be4
+OSGetArenaHi:
+.byte 0x80, 0x6D, 0xE0, 0x68 # 804a4be8
+.byte 0x4E, 0x80, 0x00, 0x20 # 804a4bec
+OSGetMEM1ArenaLo:
+.byte 0x80, 0x6D, 0x94, 0x28 # 804a4bf0
+.byte 0x4E, 0x80, 0x00, 0x20 # 804a4bf4
+OSGetMEM2ArenaLo:
+.byte 0x80, 0x6D, 0x94, 0x2C # 804a4bf8
+.byte 0x4E, 0x80, 0x00, 0x20 # 804a4bfc
+OSGetArenaLo:
+.byte 0x80, 0x6D, 0x94, 0x28 # 804a4c00
+.byte 0x4E, 0x80, 0x00, 0x20 # 804a4c04
+OSSetMEM1ArenaHi:
+.byte 0x90, 0x6D, 0xE0, 0x68 # 804a4c08
+.byte 0x4E, 0x80, 0x00, 0x20 # 804a4c0c
+OSSetMEM2ArenaHi:
+.byte 0x90, 0x6D, 0xE0, 0x6C # 804a4c10
+.byte 0x4E, 0x80, 0x00, 0x20 # 804a4c14
+OSSetArenaHi:
+.byte 0x90, 0x6D, 0xE0, 0x68 # 804a4c18
+.byte 0x4E, 0x80, 0x00, 0x20 # 804a4c1c
+OSSetMEM1ArenaLo:
+.byte 0x90, 0x6D, 0x94, 0x28 # 804a4c20
+.byte 0x4E, 0x80, 0x00, 0x20 # 804a4c24
+OSSetMEM2ArenaLo:
+.byte 0x90, 0x6D, 0x94, 0x2C # 804a4c28
+.byte 0x4E, 0x80, 0x00, 0x20 # 804a4c2c
+OSSetArenaLo:
+.byte 0x90, 0x6D, 0x94, 0x28 # 804a4c30
+.byte 0x4E, 0x80, 0x00, 0x20 # 804a4c34
+OSAllocFromMEM1ArenaLo:
+.byte 0x80, 0x0D, 0x94, 0x28 # 804a4c38
+.byte 0x38, 0xA4, 0xFF, 0xFF # 804a4c3c
+.byte 0x7C, 0xA6, 0x28, 0xF8 # 804a4c40
+.byte 0x7C, 0xA4, 0x02, 0x14 # 804a4c44
+.byte 0x38, 0x05, 0xFF, 0xFF # 804a4c48
+.byte 0x7C, 0xC0, 0x00, 0x38 # 804a4c4c
+.byte 0x7C, 0x60, 0x1A, 0x14 # 804a4c50
+.byte 0x7C, 0x83, 0x22, 0x14 # 804a4c54
+.byte 0x7C, 0x03, 0x03, 0x78 # 804a4c58
+.byte 0x38, 0x04, 0xFF, 0xFF # 804a4c5c
+.byte 0x7C, 0xC0, 0x00, 0x38 # 804a4c60
+.byte 0x90, 0x0D, 0x94, 0x28 # 804a4c64
+.byte 0x4E, 0x80, 0x00, 0x20 # 804a4c68
+.section .sdata
+__OSArenaLo:
+.byte 0xFF, 0xFF, 0xFF, 0xFF # 806b2a48
+s_mem2ArenaLo:
+.byte 0xFF, 0xFF, 0xFF, 0xFF # 806b2a4c
+.section .sbss
+__OSArenaHi:
+.byte 0x00, 0x00, 0x00, 0x00 # 806b7688
+s_mem2ArenaHi:
+.byte 0x00, 0x00, 0x00, 0x00 # 806b768c

@@ -1,0 +1,24 @@
+; Generated with ikazuchi 1.0 by riidefi
+; Object File: LayoutActorFlag
+; Segments:
+;     .text:       0x80367a6c -> 0x80367a88
+
+
+; Symbols Defined
+; 80367a6c -> 80367a88 __ct__15LayoutActorFlagFv
+
+
+; Exports
+.global __ct__15LayoutActorFlagFv
+
+
+; Segments
+.section .text
+__ct__15LayoutActorFlagFv:
+.byte 0x38, 0x00, 0x00, 0x00 # 80367a6c
+.byte 0x38, 0x80, 0x00, 0x01 # 80367a70
+.byte 0x98, 0x83, 0x00, 0x00 # 80367a74
+.byte 0x98, 0x03, 0x00, 0x02 # 80367a78
+.byte 0x98, 0x03, 0x00, 0x01 # 80367a7c
+.byte 0x98, 0x03, 0x00, 0x03 # 80367a80
+.byte 0x4E, 0x80, 0x00, 0x20 # 80367a84
